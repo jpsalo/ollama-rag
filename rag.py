@@ -19,7 +19,7 @@ class ChatPDF:
     retriever = None
     chain = None
 
-    def __init__(self, llm_model: str = "qwen2.5"):
+    def __init__(self, llm_model: str = "llama3.2"):
         self.model = ChatOllama(model=llm_model)
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1024, chunk_overlap=100

@@ -3,9 +3,9 @@ import time
 import tempfile
 import streamlit as st
 from streamlit_chat import message
-from rag import ChatPDF
+from rag import ChatRAG
 
-st.set_page_config(page_title="ChatPDF")
+st.set_page_config(page_title="Chat")
 
 
 def display_messages():
@@ -42,7 +42,10 @@ def read_and_save_file():
             f"Ingesting {file.name}"
         ):
             t0 = time.time()
-            st.session_state["assistant"].ingest(file_path)
+            if file.type == "application/pdf":
+                st.session_state["assistant"].ingest_pdf(file_path)
+            elif file.type == "text/csv":
+                st.session_state["assistant"].ingest_csv(file_path)
             t1 = time.time()
 
         st.session_state["messages"].append(
@@ -57,14 +60,14 @@ def read_and_save_file():
 def page():
     if len(st.session_state) == 0:
         st.session_state["messages"] = []
-        st.session_state["assistant"] = ChatPDF()
+        st.session_state["assistant"] = ChatRAG()
 
-    st.header("ChatPDF")
+    st.header("Chat")
 
     st.subheader("Upload a document")
     st.file_uploader(
         "Upload document",
-        type=["pdf"],
+        type=["csv", "pdf"],
         key="file_uploader",
         on_change=read_and_save_file,
         label_visibility="collapsed",

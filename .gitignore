@@ -1,5 +1,9 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python
-# Edit at https://www.toptal.com/developers/gitignore?templates=python
+# Created by https://www.toptal.com/developers/gitignore/api/python,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,macos
+
+### macOS ###
+# General
+.DS_Store
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -176,3 +180,4 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 chroma_db/
+data/

@@ -3,18 +3,18 @@ from langchain.schema.runnable import RunnablePassthrough
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_community.vectorstores.utils import filter_complex_metadata
 from langchain_core.globals import set_verbose, set_debug
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
-
 set_debug(True)
 set_verbose(True)
 
 
-class ChatPDF:
+class ChatRAG:
     vector_store = None
     retriever = None
     chain = None
@@ -28,7 +28,7 @@ class ChatPDF:
             [
                 (
                     "system",
-                    "You are a helpful assistant that can answer questions about the PDF document that uploaded by the user. ",
+                    "You are a helpful assistant that can answer questions about the document that the user uploaded. ",
                 ),
                 (
                     "human",
@@ -41,13 +41,23 @@ class ChatPDF:
         self.retriever = None
         self.chain = None
 
-    def ingest(self, pdf_file_path: str):
+    def ingest_pdf(self, pdf_file_path: str):
         docs = PyPDFLoader(file_path=pdf_file_path).load()
         chunks = self.text_splitter.split_documents(docs)
         chunks = filter_complex_metadata(chunks)
 
         self.vector_store = Chroma.from_documents(
             documents=chunks,
+            embedding=FastEmbedEmbeddings(),
+            persist_directory="chroma_db",
+        )
+
+    def ingest_csv(self, csv_file_path: str):
+        loader = CSVLoader(file_path=csv_file_path, autodetect_encoding=True)
+        data = loader.load()
+
+        self.vector_store = Chroma.from_documents(
+            documents=data,
             embedding=FastEmbedEmbeddings(),
             persist_directory="chroma_db",
         )
@@ -73,7 +83,7 @@ class ChatPDF:
         )
 
         if not self.chain:
-            return "Please, add a PDF document first."
+            return "Please, add a document first."
 
         return self.chain.invoke(query)
 

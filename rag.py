@@ -1,13 +1,13 @@
-from langchain_core.globals import set_verbose, set_debug
-from langchain_community.vectorstores import Chroma
-from langchain_community.chat_models import ChatOllama
-from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain.schema.output_parser import StrOutputParser
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.runnable import RunnablePassthrough
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_chroma import Chroma
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_community.vectorstores.utils import filter_complex_metadata
+from langchain_core.globals import set_verbose, set_debug
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama import ChatOllama
 
 
 set_debug(True)

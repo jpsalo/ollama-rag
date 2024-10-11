@@ -28,11 +28,11 @@ class ChatRAG:
             [
                 (
                     "system",
-                    "You are a helpful assistant that can answer questions about the document that the user uploaded. ",
+                    "You are a helpful assistant that can answer questions about the document that the user uploaded.",
                 ),
                 (
                     "human",
-                    "Here is the document pieces: {context}\nQuestion: {question}",
+                    'Here are the document pieces: "{context}"\nQuestion: "{question}"',
                 ),
             ]
         )
